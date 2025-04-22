@@ -13,8 +13,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-ins
     libxkbfile-dev \
     libnotify-bin \
     libkrb5-dev \
-    npm \
-    nodejs \
+    xdg-utils \
     libssl-dev \
     curl \
     ca-certificates \
@@ -22,6 +21,13 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-ins
     sudo \
     python3 \
     && rm -rf /var/lib/apt/lists/*
+
+# Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+  && apt-get install -y nodejs
+
+ENV NODE_OPTIONS="--max-old-space-size=4096"
+
 
 # Create a developer user
 RUN groupadd --gid $group_id developer && useradd --uid $user_id --gid $group_id -m developer && \
@@ -31,7 +37,6 @@ RUN groupadd --gid $group_id developer && useradd --uid $user_id --gid $group_id
 USER developer
 WORKDIR /home/developer
 
-# Optional: Rust (WASM) support if needed later
 # RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --target wasm32-unknown-unknown
 # ENV PATH=/home/developer/.cargo/bin:$PATH
 # RUN cargo install --git https://github.com/rustwasm/wasm-bindgen.git  --tag 0.2.100 wasm-bindgen-cli
