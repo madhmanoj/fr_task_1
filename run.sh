@@ -12,4 +12,6 @@ if [ ! -d "vscode" ]; then
     cd ..
 fi
 
-./vscode/scripts/code-web.sh --host 0.0.0.0
+./vscode/scripts/code-web.sh --host 0.0.0.0 --extensionDevelopmentPath=/workspaces/fr_task_1/ext1
+
+# we need to npm run compile, after every change to the extension
