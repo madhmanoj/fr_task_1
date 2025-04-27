@@ -4,24 +4,44 @@ export function activate(context: vscode.ExtensionContext) {
 	console.log('Congratulations, your extension "ext1" is now active in the web extension host!');
 
 	const disposable = vscode.commands.registerCommand('ext1.openImage', () => {
-		const panel = vscode.window.createWebviewPanel(
-			'imageViewer',
-			'Image Viewer', 
+		console.log('Starting Open Image');
+
+		let panel = vscode.window.createWebviewPanel(
+			'renderImage',
+			'Render Panel',
 			vscode.ViewColumn.One,
+			{
+				// Enable local resource loading
+				enableScripts: true,
+				localResourceRoots: [vscode.Uri.joinPath(context.extensionUri, 'media')]
+			}
 		);
 
-		// const imagePath = vscode.Uri.joinPath(context.extensionUri, 'media', 'images.jpeg');
-		// const imageSrc = panel.webview.asWebviewUri(imagePath);
+		panel.webview.html = getWebviewContent(panel.webview, context.extensionUri);
 
-		panel.webview.html = `
-			<!DOCTYPE html>
-			<html>
-			<body style="background-color:black;height:100%;width:100%">
-				
-			</body>
-			</html>
-		`;
+		console.log('Closing Open Image');
 	});
 
 	context.subscriptions.push(disposable);
+}
+
+export function deactivate() {}
+
+function getWebviewContent(webview: vscode.Webview, extensionUri: vscode.Uri): string {
+	const imagePath = vscode.Uri.joinPath(extensionUri, 'media', 'image.jpeg');
+	const imageSrc = webview.asWebviewUri(imagePath);
+
+	return `
+		<!DOCTYPE html>
+		<html lang="en">
+		<head>
+			<meta charset="UTF-8">
+			<title>Render Image</title>
+		</head>
+		<body>
+			<h1>Image from Extension</h1>
+			<img src="${imageSrc}" alt="Example Image" width="500" />
+		</body>
+		</html>
+	`;
 }

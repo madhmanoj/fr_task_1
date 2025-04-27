@@ -13,6 +13,6 @@
   "remoteUser": "developer",
   "appPort": [8080],
   "runArgs": [
-    "--add-host=host.docker.internal:host-gateway"
+    "--network", "host"
   ]
 }

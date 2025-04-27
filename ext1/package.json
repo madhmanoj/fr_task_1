@@ -9,9 +9,6 @@
   "categories": [
     "Other"
   ],
-  "webviewResources": [
-    "media/**"
-  ],
   "activationEvents": [],
   "browser": "./dist/web/extension.js",
   "contributes": {
