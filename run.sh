@@ -12,6 +12,20 @@ if [ ! -d "vscode" ]; then
     cd ..
 fi
 
-./vscode/scripts/code-web.sh --host 0.0.0.0 --extensionDevelopmentPath=/workspaces/fr_task_1/ext1
+cd ext1
+if [ ! -d "node_modules" ]; then
+    npm install
+else
+    echo "node_modules already exists, skipping 'npm install'"
+fi
 
-# we need to npm run compile, after every change to the extension
+# Compile packages if  
+if [ ! -d "dist" ]; then
+    npm run compile-web
+else
+    echo "dist already exists, skipping 'npm run compile-web'"
+fi
+cd ..
+
+
+./vscode/scripts/code-web.sh --host 0.0.0.0 --extensionDevelopmentPath=/workspaces/fr_task_1/ext1
